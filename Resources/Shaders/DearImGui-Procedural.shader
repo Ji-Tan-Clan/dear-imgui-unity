@@ -1,6 +1,7 @@
 ﻿Shader "DearImGui/Procedural"
 {
     // shader for Universal render pipeline
+/*
     SubShader
     {
         Tags { "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" "PreviewType" = "Plane" }
@@ -34,6 +35,7 @@
             ENDHLSL
         }
     }
+*/
 
     // shader for builtin rendering
     SubShader
