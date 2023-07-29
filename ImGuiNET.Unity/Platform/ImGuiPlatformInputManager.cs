@@ -27,8 +27,10 @@ namespace ImGuiNET.Unity
 
         readonly PlatformCallbacks _callbacks = new PlatformCallbacks
         {
-            GetClipboardText = (_) => GUIUtility.systemCopyBuffer,
-            SetClipboardText = (_, text) => GUIUtility.systemCopyBuffer = text,
+            //BM2 CHANGED HERE
+            //GetClipboardText = (_) => GUIUtility.systemCopyBuffer,
+            //SetClipboardText = (_, text) => GUIUtility.systemCopyBuffer = text,
+            
 #if IMGUI_FEATURE_CUSTOM_ASSERT
             LogAssert = (condition, file, line) => Debug.LogError($"[DearImGui] Assertion failed: '{condition}', file '{file}', line: {line}."),
             DebugBreak = () => System.Diagnostics.Debugger.Break(),
@@ -39,7 +41,9 @@ namespace ImGuiNET.Unity
         {
             _cursorShapes = cursorShapes;
             _iniSettings = iniSettings;
-            _callbacks.ImeSetInputScreenPos = (x, y) => Input.compositionCursorPos = new Vector2(x, y);
+            
+            //BM2 CHANGED HERE
+            //_callbacks.ImeSetInputScreenPos = (x, y) => Input.compositionCursorPos = new Vector2(x, y);
         }
 
         public bool Initialize(ImGuiIOPtr io)
@@ -79,9 +83,12 @@ namespace ImGuiNET.Unity
             io.DeltaTime = Time.unscaledDeltaTime;                              // setup timestep
 
             // input
+            //BM2 CHANGED HERE
             UpdateKeyboard(io);                                                 // update keyboard state
-            UpdateMouse(io);                                                    // update mouse state
-            UpdateCursor(io, ImGui.GetMouseCursor());                           // update Unity cursor with the cursor requested by ImGui
+            
+            //TODO seems to be working ? test on xbox
+            //UpdateMouse(io);                                                    // update mouse state
+            //UpdateCursor(io, ImGui.GetMouseCursor());                           // update Unity cursor with the cursor requested by ImGui
 
             // ini settings
             if (_iniSettings != null && io.WantSaveIniSettings)

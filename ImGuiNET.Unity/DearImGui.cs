@@ -73,8 +73,10 @@ namespace ImGuiNET.Unity
 
             _context.textures.BuildFontAtlas(io, _fontAtlasConfiguration);
             _context.textures.Initialize(io);
-
+            
             SetPlatform(Platform.Create(_platformType, _cursorShapes, _iniSettings), io);
+            
+            //TODO breaks in SetPlatform, so it never creates the renderer !
             SetRenderer(RenderUtils.Create(_rendererType, _shaders, _context.textures), io);
             if (_platform == null) Fail(nameof(_platform));
             if (_renderer == null) Fail(nameof(_renderer));

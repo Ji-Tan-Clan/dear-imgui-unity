@@ -35,9 +35,13 @@ namespace ImGuiNET.Unity
     {
         // fields to keep delegates from being collected by the garbage collector
         // after assigning its function pointers to unmanaged code
-        GetClipboardTextCallback _getClipboardText;
-        SetClipboardTextCallback _setClipboardText;
-        ImeSetInputScreenPosCallback _imeSetInputScreenPos;
+        
+        //IL2CPP does not support marshaling delegates that point to instance methods to native code.
+        //BM2 CHANGED HERE
+        //static GetClipboardTextCallback _getClipboardText;
+        //static SetClipboardTextCallback _setClipboardText;
+        //static ImeSetInputScreenPosCallback _imeSetInputScreenPos;
+
 #if IMGUI_FEATURE_CUSTOM_ASSERT
         LogAssertCallback _logAssert;
         DebugBreakCallback _debugBreak;
@@ -45,9 +49,9 @@ namespace ImGuiNET.Unity
 
         public void Assign(ImGuiIOPtr io)
         {
-            io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(_setClipboardText);
-            io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(_getClipboardText);
-            io.ImeSetInputScreenPosFn = Marshal.GetFunctionPointerForDelegate(_imeSetInputScreenPos);
+            //io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(_setClipboardText);
+            //io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(_getClipboardText);
+            //io.ImeSetInputScreenPosFn = Marshal.GetFunctionPointerForDelegate(_imeSetInputScreenPos);
 #if IMGUI_FEATURE_CUSTOM_ASSERT
             io.SetBackendPlatformUserData<CustomAssertData>(new CustomAssertData
             {
@@ -67,6 +71,7 @@ namespace ImGuiNET.Unity
 #endif
         }
 
+        /*
         public GetClipboardTextSafeCallback GetClipboardText
         {
             set => _getClipboardText = (user_data) =>
@@ -86,6 +91,7 @@ namespace ImGuiNET.Unity
             };
         }
 
+       
         public ImeSetInputScreenPosCallback ImeSetInputScreenPos
         {
             set => _imeSetInputScreenPos = (x, y) =>
@@ -93,7 +99,7 @@ namespace ImGuiNET.Unity
                 try { value(x, y); }
                 catch (Exception ex) { Debug.LogException(ex); }
             };
-        }
+        }*/
 
 #if IMGUI_FEATURE_CUSTOM_ASSERT
         public LogAssertSafeCallback LogAssert
