@@ -19,7 +19,9 @@ namespace ImGuiNET.Unity.Editor
                 // Plugin has redefined IM_ASSERT and IM_DEBUG_BREAK in 'imconfig.h'.
                 // A structure with function pointers to managed functions that implement
                 // the functionality should be set to ImGuiIO.BackendPlatformUserData.
-                ("IMGUI_FEATURE_CUSTOM_ASSERT", HasCustomAssert()),
+                
+                //BM2 CHANGED - stop adding custom assert ... It breaks in IL2CPP..
+                //("IMGUI_FEATURE_CUSTOM_ASSERT", HasCustomAssert()),
 
                 // Font atlases can be built using FreeType instead of stb_truetype.
                 ("IMGUI_FEATURE_FREETYPE",      HasFreetype()),
