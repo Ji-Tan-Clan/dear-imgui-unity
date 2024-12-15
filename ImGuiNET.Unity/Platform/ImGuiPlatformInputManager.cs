@@ -27,9 +27,10 @@ namespace ImGuiNET.Unity
 
         readonly PlatformCallbacks _callbacks = new PlatformCallbacks
         {
-            //BM2 CHANGED HERE
-            //GetClipboardText = (_) => GUIUtility.systemCopyBuffer,
-            //SetClipboardText = (_, text) => GUIUtility.systemCopyBuffer = text,
+#if UNITY_EDITOR
+            GetClipboardText = (_) => GUIUtility.systemCopyBuffer,
+            SetClipboardText = (_, text) => GUIUtility.systemCopyBuffer = text,
+#endif
             
 #if IMGUI_FEATURE_CUSTOM_ASSERT
             LogAssert = (condition, file, line) => Debug.LogError($"[DearImGui] Assertion failed: '{condition}', file '{file}', line: {line}."),
@@ -42,8 +43,9 @@ namespace ImGuiNET.Unity
             _cursorShapes = cursorShapes;
             _iniSettings = iniSettings;
             
-            //BM2 CHANGED HERE
-            //_callbacks.ImeSetInputScreenPos = (x, y) => Input.compositionCursorPos = new Vector2(x, y);
+#if UNITY_EDITOR
+            _callbacks.ImeSetInputScreenPos = (x, y) => Input.compositionCursorPos = new Vector2(x, y);
+#endif
         }
 
         public bool Initialize(ImGuiIOPtr io)
@@ -51,7 +53,6 @@ namespace ImGuiNET.Unity
             io.SetBackendPlatformName("Unity Input Manager");                   // setup backend info and capabilities
             io.BackendFlags |= ImGuiBackendFlags.HasMouseCursors;               // can honor GetMouseCursor() values
             io.BackendFlags &= ~ImGuiBackendFlags.HasSetMousePos;               // can't honor io.WantSetMousePos requests
-            // io.BackendFlags |= ImGuiBackendFlags.HasGamepad;                 // set by UpdateGamepad()
 
             _callbacks.Assign(io);                                              // assign platform callbacks
             io.ClipboardUserData = IntPtr.Zero;
@@ -83,12 +84,12 @@ namespace ImGuiNET.Unity
             io.DeltaTime = Time.unscaledDeltaTime;                              // setup timestep
 
             // input
-            //BM2 CHANGED HERE
             UpdateKeyboard(io);                                                 // update keyboard state
             
-            //TODO seems to be working ? test on xbox
-            //UpdateMouse(io);                                                    // update mouse state
-            //UpdateCursor(io, ImGui.GetMouseCursor());                           // update Unity cursor with the cursor requested by ImGui
+#if UNITY_EDITOR
+            UpdateMouse(io);                                                    // update mouse state
+            UpdateCursor(io, ImGui.GetMouseCursor());                           // update Unity cursor with the cursor requested by ImGui
+#endif
 
             // ini settings
             if (_iniSettings != null && io.WantSaveIniSettings)
